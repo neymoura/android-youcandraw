@@ -2,7 +2,7 @@
 
 Hey everyone!
 
-I made this app to show how simple is to capture user input and draw something on screen =)
+I made this app to show how simple is to capture user input and draw something on screen using Kotlin =)
 
 ## How does it work?
 
