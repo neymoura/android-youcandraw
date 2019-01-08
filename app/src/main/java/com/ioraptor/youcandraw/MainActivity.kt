@@ -35,11 +35,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupView() {
         userCanvasView.setOnTouchListener { _, event ->
             when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    printPointerLocation(event)
-                    draw(event)
-                }
-                MotionEvent.ACTION_MOVE -> {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                     printPointerLocation(event)
                     draw(event)
                 }
