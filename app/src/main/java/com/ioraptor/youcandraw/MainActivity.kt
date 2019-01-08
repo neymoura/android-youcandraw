@@ -13,9 +13,11 @@ class MainActivity : AppCompatActivity() {
     val bitmap by lazy {
         Bitmap.createBitmap(userCanvasView.width, userCanvasView.height, Bitmap.Config.ARGB_8888)
     }
+
     val canvas by lazy {
         Canvas(bitmap)
     }
+
     val paint by lazy {
         val paint = Paint()
         paint.isAntiAlias = true
@@ -46,8 +48,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun draw(event: MotionEvent) {
         userCanvasView.setImageBitmap(bitmap)
-        val (_, pointerCoords) = event.getPointer()
-        canvas.drawPoint(pointerCoords.x, pointerCoords.y, paint)
+        val (_, currentCoords, previousCoords) = event.getPointer()
+        if (previousCoords != null) {
+            canvas.drawLine(previousCoords.x, previousCoords.y, currentCoords.x, currentCoords.y, paint)
+            val path = Path()
+            path.moveTo(previousCoords.x, previousCoords.y)
+            path.lineTo(currentCoords.x, currentCoords.y)
+            canvas.drawPath(path, paint)
+        } else {
+            canvas.drawPoint(currentCoords.x, currentCoords.y, paint)
+        }
         userCanvasView.invalidate()
     }
 
@@ -56,11 +66,21 @@ class MainActivity : AppCompatActivity() {
         Log.d(BuildConfig.APPLICATION_ID, "Pointer $pointerId at x -> ${pointerCoords.x}, y -> ${pointerCoords.y}")
     }
 
-    private fun MotionEvent.getPointer(): Pair<Int, MotionEvent.PointerCoords> {
+    private fun MotionEvent.getPointer(): Triple<Int, MotionEvent.PointerCoords, MotionEvent.PointerCoords?> {
         val pointerId: Int = this.getPointerId(this.actionIndex)
-        val pointerCoords = MotionEvent.PointerCoords()
-        this.getPointerCoords(pointerId, pointerCoords)
-        return Pair(pointerId, pointerCoords)
+        val currentCoords = MotionEvent.PointerCoords()
+        val previousCoords = getLastCoords(pointerId)
+        this.getPointerCoords(pointerId, currentCoords)
+        return Triple(pointerId, currentCoords, previousCoords)
+    }
+
+    private fun MotionEvent.getLastCoords(pointerId: Int): MotionEvent.PointerCoords? {
+        var previousCoords: MotionEvent.PointerCoords? = null
+        if (this.historySize > 1) {
+            previousCoords = MotionEvent.PointerCoords()
+            this.getHistoricalPointerCoords(pointerId, this.historySize - 1, previousCoords)
+        }
+        return previousCoords
     }
 
 }
