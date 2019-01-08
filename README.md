@@ -4,6 +4,10 @@ Hey everyone!
 
 I made this app to show how simple is to capture user input and draw something on screen =)
 
+<p align="center">
+    <img src="app-demo.gif"/>
+</p>
+
 ## How does it work?
 
 Basically this app has needs two things to work:
