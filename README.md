@@ -126,6 +126,6 @@ For starters, we will use three things to draw something:
 
 ## TODO
 - [x] Create a demo gif
-- [] Make this a component
-- [] Allow the user to change the `Paint` attributes
-- [] Draw lines between current and last input
+- [ ] Make this a component
+- [ ] Allow the user to change the `Paint` attributes
+- [ ] Draw lines between current and last input
