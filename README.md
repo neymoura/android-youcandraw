@@ -122,7 +122,15 @@ For starters, we will use three things to draw something:
     Finally, we can draw something on that canvas! To do so:
     ```
     canvas.drawPoint(pointerCoords.x, pointerCoords.y, paint)
+    userCanvasView.invalidate()
     ```
+    Dont forget to call `userCanvasView.invalidate()` to refresh the painting =)
+
+## Conclusion
+
+Well! Thats it folks! I hope you enjoyed this litte drawing demo on Android! There`s a lot of things you can do from now on like starting creating your own drawing app, or even a digital signature component!
+
+Till next time!
 
 ## TODO
 - [x] Create a demo gif
