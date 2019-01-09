@@ -28,6 +28,10 @@ class MainActivity : AppCompatActivity() {
         paint
     }
 
+    val path by lazy {
+        Path()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,9 +41,21 @@ class MainActivity : AppCompatActivity() {
     private fun setupView() {
         userCanvasView.setOnTouchListener { _, event ->
             when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                MotionEvent.ACTION_DOWN -> {
+                    path.reset()
+                    val currentPointer = event.getPointer().second
+                    path.moveTo(currentPointer.x, currentPointer.y)
+                    canvas.drawPoint(currentPointer.x, currentPointer.y, paint)
+                    userCanvasView.invalidate()
+                }
+                MotionEvent.ACTION_MOVE -> {
                     printPointerLocation(event)
                     draw(event)
+                }
+                MotionEvent.ACTION_UP -> {
+                    val currentPointer = event.getPointer().second
+                    canvas.drawPoint(currentPointer.x, currentPointer.y, paint)
+                    userCanvasView.invalidate()
                 }
             }
             true
@@ -50,9 +66,6 @@ class MainActivity : AppCompatActivity() {
         userCanvasView.setImageBitmap(bitmap)
         val (_, currentCoords, previousCoords) = event.getPointer()
         if (previousCoords != null) {
-            canvas.drawLine(previousCoords.x, previousCoords.y, currentCoords.x, currentCoords.y, paint)
-            val path = Path()
-            path.moveTo(previousCoords.x, previousCoords.y)
             path.lineTo(currentCoords.x, currentCoords.y)
             canvas.drawPath(path, paint)
         } else {
