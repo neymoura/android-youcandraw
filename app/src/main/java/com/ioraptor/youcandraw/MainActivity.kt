@@ -53,26 +53,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fingerDown(event: MotionEvent) {
-        val currentPointer = event.getPointer().first
-        currentPointer?.let {
-            path.reset()
-            path.moveTo(currentPointer.x, currentPointer.y)
-            canvas.drawPoint(currentPointer.x, currentPointer.y, paint)
-            userCanvasView.invalidate()
-        }
+        path.reset()
+        path.moveTo(event.x, event.y)
+        canvas.drawPoint(event.x, event.y, paint)
+        userCanvasView.invalidate()
     }
 
     private fun fingerDrag(event: MotionEvent) {
-        val (currentCoords, hasHistory) = event.getPointer()
-        currentCoords?.let {
-            if (hasHistory) {
-                path.lineTo(currentCoords.x, currentCoords.y)
-                canvas.drawPath(path, paint)
-            } else {
-                canvas.drawPoint(currentCoords.x, currentCoords.y, paint)
-            }
-            userCanvasView.invalidate()
+        if (event.historySize > 0) {
+            path.lineTo(event.x, event.y)
+            canvas.drawPath(path, paint)
+        } else {
+            canvas.drawPoint(event.x, event.y, paint)
         }
+        userCanvasView.invalidate()
     }
 
 }
