@@ -47,37 +47,32 @@ class MainActivity : AppCompatActivity() {
                 MotionEvent.ACTION_MOVE -> {
                     fingerDrag(event)
                 }
-                MotionEvent.ACTION_UP -> {
-                    fingerUp(event)
-                }
             }
             true
         }
     }
 
-    private fun fingerUp(event: MotionEvent) {
-        val currentPointer = event.getPointer().second
-        canvas.drawPoint(currentPointer.x, currentPointer.y, paint)
-        userCanvasView.invalidate()
-    }
-
     private fun fingerDown(event: MotionEvent) {
-        path.reset()
-        val currentPointer = event.getPointer().second
-        path.moveTo(currentPointer.x, currentPointer.y)
-        canvas.drawPoint(currentPointer.x, currentPointer.y, paint)
-        userCanvasView.invalidate()
+        val currentPointer = event.getPointer().first
+        currentPointer?.let {
+            path.reset()
+            path.moveTo(currentPointer.x, currentPointer.y)
+            canvas.drawPoint(currentPointer.x, currentPointer.y, paint)
+            userCanvasView.invalidate()
+        }
     }
 
     private fun fingerDrag(event: MotionEvent) {
-        val (_, currentCoords, previousCoords) = event.getPointer()
-        if (previousCoords != null) {
-            path.lineTo(currentCoords.x, currentCoords.y)
-            canvas.drawPath(path, paint)
-        } else {
-            canvas.drawPoint(currentCoords.x, currentCoords.y, paint)
+        val (currentCoords, hasHistory) = event.getPointer()
+        currentCoords?.let {
+            if (hasHistory) {
+                path.lineTo(currentCoords.x, currentCoords.y)
+                canvas.drawPath(path, paint)
+            } else {
+                canvas.drawPoint(currentCoords.x, currentCoords.y, paint)
+            }
+            userCanvasView.invalidate()
         }
-        userCanvasView.invalidate()
     }
 
 }
