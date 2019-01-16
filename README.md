@@ -27,14 +27,7 @@ userCanvasView.setOnTouchListener { _, event ->
 
 Now with the `event: MotionEvent` we create a useful extension function to retreive the `X,Y` touch coordinates with:
 
-```
-private fun MotionEvent.getPointer(): Pair<Int, MotionEvent.PointerCoords> {
-    val pointerId: Int = this.getPointerId(this.actionIndex)
-    val pointerCoords = MotionEvent.PointerCoords()
-    this.getPointerCoords(pointerId, pointerCoords)
-    return Pair(pointerId, pointerCoords)
-}
-```
+Now with the `event: MotionEvent` we can retreive the `X,Y` touch coordinates just with `event.x` and `event.y`!
 
 Handling the touch event more properly, we want to draw only when the user has touched the screen (`MotionEvent.ACTION_DOWN`) or moved his finger while touching (`MotionEvent.ACTION_MOVE`).
 
@@ -43,9 +36,11 @@ Now your `userCanvasView.setOnTouchListener` looks like:
 ```
 userCanvasView.setOnTouchListener { _, event ->
     when (event.actionMasked) {
-        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
-            printPointerLocation(event)
-            draw(event)
+        MotionEvent.ACTION_DOWN -> {
+            fingerDown(event)
+        }
+        MotionEvent.ACTION_MOVE -> {
+            fingerDrag(event)
         }
     }
     true
@@ -76,6 +71,8 @@ For starters, we will use three things to draw something:
     }
     ```
 
+    **Tip**: Play with those values! They don't byte and you can achieve nice results with your art masterpiece! :D
+
 2. Bitmap:
 
     **Where we will drawn**
@@ -101,7 +98,7 @@ For starters, we will use three things to draw something:
     ```
     To show the `Bitmap` on the `ImageView` we do the following:
     ```
-    userCanvasView.setImageBitmap(bitmap)
+    userCanvasView.post { userCanvasView.setImageBitmap(bitmap) }
     ```
     Almost everything ready by now! We just need to define the `Canvas` wich will allow us to draw in the `Bitmap`.
 
@@ -124,7 +121,8 @@ For starters, we will use three things to draw something:
     canvas.drawPoint(pointerCoords.x, pointerCoords.y, paint)
     userCanvasView.invalidate()
     ```
-    Dont forget to call `userCanvasView.invalidate()` to refresh the painting =)
+
+    **Tip**: Dont forget to call `userCanvasView.invalidate()` to refresh the painting =)
 
 ## Conclusion
 
