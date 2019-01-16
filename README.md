@@ -19,7 +19,7 @@ Basically this app has needs two things to work:
 
 To capture the user finger, over the drawing area, we use the `View.setOnTouchListener`:
 
-```
+```kotlin
 userCanvasView.setOnTouchListener { _, event ->
     ...
 }
@@ -33,7 +33,7 @@ Handling the touch event more properly, we want to draw only when the user has t
 
 Now your `userCanvasView.setOnTouchListener` looks like:
 
-```
+```kotlin
 userCanvasView.setOnTouchListener { _, event ->
     when (event.actionMasked) {
         MotionEvent.ACTION_DOWN -> {
@@ -59,7 +59,7 @@ For starters, we will use three things to draw something:
 
     The paint object contains parameters like Color, Stroke, Stroke width, and so on!
 
-    ```
+    ```kotlin
     val paint by lazy {
         val paint = Paint()
         paint.isAntiAlias = true
@@ -83,13 +83,13 @@ For starters, we will use three things to draw something:
 
     We can create the `Bitmap` with:
 
-    ```
+    ```kotlin
     val bitmap by lazy {
         Bitmap.createBitmap(userCanvasView.width, userCanvasView.height, Bitmap.Config.ARGB_8888)
     }
     ```
     In our layout we have the following `ImageView`:
-    ```
+    ```xml
     <ImageView
         android:id="@+id/userCanvasView"
         android:layout_width="match_parent"
@@ -97,7 +97,7 @@ For starters, we will use three things to draw something:
         android:scaleType="fitXY"/>
     ```
     To show the `Bitmap` on the `ImageView` we do the following:
-    ```
+    ```kotlin
     userCanvasView.post { userCanvasView.setImageBitmap(bitmap) }
     ```
     Almost everything ready by now! We just need to define the `Canvas` wich will allow us to draw in the `Bitmap`.
@@ -109,7 +109,7 @@ For starters, we will use three things to draw something:
     The `Canvas` is responsible to link the `Paint` and the `Bitmap`.
 
     To setup the `Canvas` we just need to:
-    ```
+    ```kotlin
     val canvas by lazy {
         Canvas(bitmap)
     }
@@ -117,7 +117,7 @@ For starters, we will use three things to draw something:
     Yep! Simple like that!
 
     Finally, we can draw something on that canvas! To do so:
-    ```
+    ```kotlin
     canvas.drawPoint(pointerCoords.x, pointerCoords.y, paint)
     userCanvasView.invalidate()
     ```
