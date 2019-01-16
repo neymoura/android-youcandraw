@@ -60,12 +60,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fingerDrag(event: MotionEvent) {
-        if (event.historySize > 0) {
-            path.lineTo(event.x, event.y)
-            canvas.drawPath(path, paint)
-        } else {
-            canvas.drawPoint(event.x, event.y, paint)
-        }
+        path.lineTo(event.x, event.y)
+        canvas.drawPath(path, paint)
         userCanvasView.invalidate()
     }
 
