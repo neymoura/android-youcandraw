@@ -2,8 +2,8 @@ package com.ioraptor.youcandraw
 
 import android.graphics.*
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
