@@ -1,7 +1,6 @@
 package com.ioraptor.youcandraw
 
 import android.graphics.Rect
-import android.os.SystemClock
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
